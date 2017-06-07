@@ -50,3 +50,21 @@ resource "azurerm_public_ip" "dockerpip" {
         environment = "${var.environment}"
     }
 }
+
+resource "azurerm_storage_account" "dockersa" {
+    name = "dockersa"
+    resource_group_name = "${azurerm_resource_group.dockerrm.name}"
+    location = "${var.location}"
+    account_type = "Standard_LRS"
+    
+    tags {
+        environment = "${var.environment}"
+    }
+}
+
+resource "azurerm_storage_container" "dockersc" {
+    name = "vhds"
+    resource_group_name = "${azurerm_resource_group.dockerrm.name}"
+    storage_account_name = "${azurerm_storage_account.dockersa.name}"
+    container_access_type = "private"
+}
